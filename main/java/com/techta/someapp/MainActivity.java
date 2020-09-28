@@ -5,10 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +21,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         checkFirstRun();
+
+        button = findViewById(R.id.btnNtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out);
+                button.startAnimation(animation);
+            }
+        });
 
     }
 
@@ -35,16 +49,8 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
             return;
 
-        } else if (savedVersionCode == DOESNT_EXIST) {
+        } else if (savedVersionCode == DOESNT_EXIST || currentVersionCode > savedVersionCode) {
             Intent intent = new Intent(this, WelcomeActivity.class);
-            intent.putExtra("text", "Welcome");
-            startActivity(intent);
-
-            this.finish();
-
-        } else if (currentVersionCode > savedVersionCode) {
-            Intent intent = new Intent(this, WelcomeActivity.class);
-            intent.putExtra("text", "Your app has been upgraded");
             startActivity(intent);
 
             this.finish();
